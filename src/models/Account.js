@@ -48,6 +48,7 @@ const instance = new mongoose.Schema(
   {
     timestamps: true,
   }
+  //comentario
 );
 const modelName = "UserCinema";
 

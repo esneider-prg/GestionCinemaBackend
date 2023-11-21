@@ -2,6 +2,21 @@ const mongoose = require("mongoose");
 
 const instance = new mongoose.Schema(
   { 
+
+
+    tipodocumento: {
+      type: String,
+      required: true,
+      
+    },
+    document: {
+      type: String,
+      required: true,
+      min: 6,
+      max: 12,
+    },
+   
+
     username: {
       type: String,
       min: 4,
@@ -9,6 +24,23 @@ const instance = new mongoose.Schema(
       required: true,
       lowercase: true,
       unique: true,
+    },
+    
+    lastname: {
+      type: String,
+      min: 4,
+      max: 20,
+      required: true,
+      lowercase: true,
+      unique: true,
+    },
+    email: {
+      type: String, 
+      unique: true,
+      required: true,
+      max: 50,
+      min: 5,
+      max: 10,
     },
     password: {
       type: String,
@@ -19,31 +51,7 @@ const instance = new mongoose.Schema(
       required: true,
       enum: ["user","admin"],
       default: "user",
-    },
-   /*idPerson: {
-    type: String,
-    default: "",
-    max:10,
-  },
-  Document: {
-    type: String,
-    required: true,
-    enum: ["CC","TI"],
-  }, email: {
-      type: String, 
-      unique: true,
-      default: "",
-      max: 50,
-      min: 5,
-      max: 10,
-     
-    },
-    phone: {
-      type: String,
-      default: "",
-      min: 4,
-      max: 10,
-    },*/
+    }
   },
   {
     timestamps: true,

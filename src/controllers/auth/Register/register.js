@@ -8,7 +8,11 @@ async function register(request, response, next) {
     // Validate request data
     await joi
       .object({
+        tipodocumento: joi.string().required(),
+        document: joi.string().required(),
         username: joi.string().required(),
+        lastname: joi.string().required(),
+        email: joi.string().required(),
         password: joi.string().required(),
       })
       .validateAsync(request.body);
@@ -20,14 +24,14 @@ async function register(request, response, next) {
   }
 
   try {
-    const { username, password } = request.body;
+    const { username, password, tipodocumento,document,lastname,email} = request.body;
 
     // Verify account username as unique
-    const existingAccount = await Account.findOne({ username });
+    const existingAccount = await Account.findOne({ email });
     if (existingAccount) {
       return response.status(400).json({
-        error: username,
-        message: 'An account already exists with that "username"',
+        error: email,
+        message: 'El correo ya esta registrado',
       });
     }
 
@@ -36,7 +40,7 @@ async function register(request, response, next) {
     const hash = await bcrypt.hash(password, salt);
 
     // Create account
-    const newAccount = new Account({ username, password: hash });
+    const newAccount = new Account({ username, password: hash, tipodocumento,document ,lastname,email});
     await newAccount.save();
 
     // Remove password from response data

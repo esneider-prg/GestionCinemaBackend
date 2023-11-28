@@ -14,6 +14,7 @@ async function register(request, response, next) {
         lastname: joi.string().required(),
         email: joi.string().required(),
         password: joi.string().required(),
+        passwordconfirm: joi.string().optional(),
       })
       .validateAsync(request.body);
   } catch (error) {
@@ -105,6 +106,11 @@ async function basicData(request, response, next) {
     });
   }
 }
+
+
+
+module.exports = {register,basicData};
+
 
 
 

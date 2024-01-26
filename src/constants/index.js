@@ -5,7 +5,7 @@ const MONGO_URI =
   process.env.MONGO_URI;
 const MONGO_OPTIONS = {};
 
-const JWT_SECRET = process.env.JWT_SECRET || "unsafe_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = {
   ORIGIN,

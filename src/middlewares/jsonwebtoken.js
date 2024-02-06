@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const {JWT_SECRET} = require('../constants')
+const asyncHandler = require("express-async-handler");
+const UserCinema = require("../models/Account")
 
 const signToken = (payload = {}, expiresIn = '12h') => {
   const token = jwt.sign(payload, JWT_SECRET, {expiresIn})
@@ -24,6 +26,7 @@ const authorizeBearerToken = (request, response, next) => {
     }
 
     request.auth = auth
+    
     next()
   } catch (error) {
     console.error(error)
@@ -33,7 +36,52 @@ const authorizeBearerToken = (request, response, next) => {
   }
 }
 
+// protection middleware
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
+  // check if token exists in headers
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    // set token from Bearer token in header
+    try {
+      token = req.headers.authorization.split(" ")[1];
+      // verify token and get user id
+      const decoded = jwt.verify(token, JWT_SECRET);
+      // get user id from decoded token
+      
+      req.user = await UserCinema.findById(decoded.uid).select("-password");
+      next();
+      
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+  }
+  // if token doesn't exist in headers send error
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+});
+
+
+
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as an admin");
+  }
+};
+
 module.exports = {
   authorizeBearerToken,
   signToken,
+  admin,
+  protect
 }
+

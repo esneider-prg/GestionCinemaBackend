@@ -1,30 +1,16 @@
 const Movie = require("../../models/MoviesModel.js");
 const asyncHandler = require("express-async-handler");
 
-
-
-const importMovies = asyncHandler(async (req, res) => {
-    // first we make sure our Movies table is empty by delete all documents
-    await Movie.deleteMany({});
-    // then we insert all movies from MoviesData
-    const movies = await Movie.insertMany(MoviesData);
-    res.status(201).json(movies);
-  });
-  
-  // @desc    get all movies
-  // @route   GET /api/movies
-  // @access  Public
-  
   const getMovies = asyncHandler(async (req, res) => {
     try {
-      // filter movies by Titulo, Genero, Sinopsis, Formato, Duracion and search
-      const { Titulo, Genero, Sinopsis, Formato, Duracion, search } = req.query;
+      // filter movies by Titulo, Genero, Sinopsis, Formato, HoraDisponibles and search
+      const { Titulo, Genero, Sinopsis, Formato, HoraDisponibles, search } = req.query;
       let query = {
         ...(Titulo && { Titulo }),
         ...(Genero && { Genero }),
         ...(Sinopsis && { Sinopsis }),
         ...(Formato && { Formato }),
-        ...(Duracion && { Duracion   }),
+        ...(HoraDisponibles && { HoraDisponibles   }),
         ...(search && { Titulo: { $regex: search, $options: "i" } }),
       };
   
@@ -53,19 +39,21 @@ const importMovies = asyncHandler(async (req, res) => {
       res.status(400).json({ message: error.message });
     }
   });
-  
 
   const updateMovie = asyncHandler(async (req, res) => {
     try {
       // get data from request body
       const {
         Titulo,
+        SubTitulo,
         Genero,
         Sinopsis,
-        image,
-        Formato,
         Duracion,
+        imageCartelera,
+        imageBackground,
+        Formato,
         Clasificacion,
+        HoraDisponibles,
         Valorboleta,
       } = req.body;
   
@@ -75,12 +63,16 @@ const importMovies = asyncHandler(async (req, res) => {
       if (movie) {
         // update movie data
         movie.Titulo = Titulo || movie.Titulo;
+        movie.SubTitulo = SubTitulo || movie.SubTitulo;
         movie.Genero = Genero || movie.Genero;
         movie.Sinopsis = Sinopsis || movie.Sinopsis;
-        movie.image = image || movie.image;
-        movie.Formato = Formato || movie.Formato;
         movie.Duracion = Duracion || movie.Duracion;
+        movie.image = image || movie.image;
+        movie.imageCartelera = imageCartelera || movie.imageCartelera;
+        movie.imageBackground = imageBackground || movie.imageBackground;
+        movie.Formato = Formato || movie.Formato;
         movie.Clasificacion = Clasificacion || movie.Clasificacion;
+        movie.HoraDisponibles = HoraDisponibles || movie.HoraDisponibles;
         movie.Valorboleta = Valorboleta || movie.Valorboleta;
         // save the movie in database
   
@@ -96,7 +88,7 @@ const importMovies = asyncHandler(async (req, res) => {
     }
   });
   
-
+  // @desc    Delete movie
   // @route   DELETE /api/movies/:id
   // @access  Private/Admin
   
@@ -105,10 +97,29 @@ const importMovies = asyncHandler(async (req, res) => {
       // find movie by id in database
       const movie = await Movie.findById(req.params.id);
       // if the movie is found delete it
-      
+     // console.log(movie);
       if (movie) {
         await movie.deleteOne();
         res.json({ message: "Movie removed" });
+      }
+      // if the movie is not found send 404 error
+      else {
+        res.status(404);
+        throw new Error("Movie not found");
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  const getMovieById = asyncHandler(async (req, res) => {
+    try {
+      // find movie by id in database
+      const movie = await Movie.findById(req.params.id);
+      // if the movie is found delete it
+     // console.log(movie);
+      if (movie) {
+       
+        res.json( movie);
       }
       // if the movie is not found send 404 error
       else {
@@ -126,24 +137,30 @@ const importMovies = asyncHandler(async (req, res) => {
       // get data from request body
       const {
         Titulo,
+        SubTitulo,
         Genero,
         Sinopsis,
-        image,
-        Formato,
         Duracion,
+        imageCartelera,
+        imageBackground,
+        Formato,
         Clasificacion,
+        HoraDisponibles,
         Valorboleta,
       } = req.body;
   
       // create a new movie
       const movie = new Movie({
         Titulo,
+        SubTitulo,
         Genero,
         Sinopsis,
-        image,
-        Formato,
         Duracion,
+        imageCartelera,
+        imageBackground,
+        Formato,
         Clasificacion,
+        HoraDisponibles,
         Valorboleta,
         userId: req.user._id,
       });
@@ -162,9 +179,9 @@ const importMovies = asyncHandler(async (req, res) => {
   });
   
   module.exports = {
-    importMovies,
     getMovies,
     updateMovie,
     deleteMovie,
     createMovie,
+    getMovieById,
   };

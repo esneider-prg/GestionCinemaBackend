@@ -5,6 +5,9 @@ const { PORT } = require("./constants");
 const authRoutes = require("./routes/auth");
 const moviesRouter = require("./routes/movie.js");
 const funtionRouter = require("./routes/funtioncine.js");
+const RouteReservaMovie = require("./routes/reservaMovie.js");
+const Uploadrouter = require("./controllers/pelicula/UploadFile.js");
+const {admin,protect} = require("./middlewares/jsonwebtoken.js");
 
 
 async function bootstrap() {
@@ -15,6 +18,9 @@ async function bootstrap() {
   app.use("/auth", authRoutes);
   app.use("/movies", moviesRouter);
   app.use("/funtionCine", funtionRouter);
+  app.use("/reservaMovie", RouteReservaMovie);
+  app.use("/upload", [protect],[admin] ,Uploadrouter);
+
  
 
   app.listen(PORT, () => {

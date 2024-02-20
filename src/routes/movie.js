@@ -1,5 +1,5 @@
 const express = require("express");
-const {createMovie,deleteMovie,getMovies,updateMovie} = require("../controllers/pelicula/MoviesController.js");
+const {createMovie,deleteMovie,getMovies,updateMovie,getMovieById} = require("../controllers/pelicula/MoviesController.js");
 const {admin,protect} = require("../middlewares/jsonwebtoken");
 
 
@@ -8,7 +8,7 @@ const router = express.Router();
 
 //Rutas publicas
 router.get("/", getMovies);
-
+router.get("/:id", getMovieById);
 
 
 //Rutas adminstrador

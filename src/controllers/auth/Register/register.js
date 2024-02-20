@@ -30,9 +30,12 @@ async function register(request, response, next) {
     // Verify account username as unique
     const existingAccount = await Account.findOne({ email });
     if (existingAccount) {
+      const exists = true;
       return response.status(400).json({
         error: email,
         message: 'El correo ya esta registrado',
+        exists
+        
       });
     }
 
@@ -106,11 +109,6 @@ async function basicData(request, response, next) {
     });
   }
 }
-
-
-
-module.exports = {register,basicData};
-
 
 
 

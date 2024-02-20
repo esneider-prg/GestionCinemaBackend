@@ -23,7 +23,6 @@ const instance = new mongoose.Schema(
       max: 20,
       required: true,
       lowercase: true,
-      unique: true,
     },
     
     lastname: {
@@ -32,7 +31,6 @@ const instance = new mongoose.Schema(
       max: 20,
       required: true,
       lowercase: true,
-      unique: true,
     },
     email: {
       type: String, 

@@ -12,6 +12,10 @@ const moviesSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    SubTitulo: {
+      type: String,
+      required: true,
+    },
     Genero: {
       type: String,
       required: true,
@@ -19,8 +23,16 @@ const moviesSchema = mongoose.Schema(
     Sinopsis: {
       type: String,
       required: true,
+          },
+    Duracion: {
+      type: String,
+      required: true,
     },
-    image: {
+    imageCartelera: {
+      type: String,
+      required: true,
+    },
+    imageBackground: {
       type: String,
       required: true,
     },
@@ -28,11 +40,11 @@ const moviesSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    Duracion: {
+    Clasificacion: {
       type: String,
       required: true,
     },
-    Clasificacion: {
+    HoraDisponibles: {
       type: String,
       required: true,
     },

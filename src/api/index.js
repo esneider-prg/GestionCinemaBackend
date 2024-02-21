@@ -23,7 +23,7 @@ async function bootstrap() {
  
 
   app.listen(PORT, () => {
-    console.log(`✅ Server is listening ons port: ${PORT}`);
+    console.log(`✅ Server is listening on port: ${PORT}`);
   });
 }
 

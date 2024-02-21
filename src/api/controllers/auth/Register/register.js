@@ -105,7 +105,7 @@ async function basicData(request, response, next) {
   } catch (error) {
     console.error(error);
     return response.status(500).send({
-      message: "Error Registerr Data Person"
+      message: "Error Register Data Person"
     });
   }
 }

@@ -13,8 +13,7 @@ const {admin,protect} = require("./middlewares/jsonwebtoken.js");
 async function bootstrap() {
   await mongo.connect();
 
-  app.get("/api", (req, res) => res.status(200).json({ message: "Hello Cinemaaaaa!" }));
-  app.get("/api/health", (req, res) => res.status(200).json({ message: "Hello Cinema!" }));
+
   app.use("/api/auth", authRoutes);
   app.use("/api/movies", moviesRouter);
   app.use("/api/funtionCine", funtionRouter);

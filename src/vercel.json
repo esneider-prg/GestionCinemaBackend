@@ -23,7 +23,7 @@
   "routes": [
     { "src": "/", "dest": "/index.js" },
     { "src": "/health", "dest": "/index.js" },
-    { "src": "/auth/(.*)", "dest": "/auth.js" },
+    { "src": "/auth/(.*)", "dest": "/routes/auth.js" },
     { "src": "/movies/(.*)", "dest": "/mopvie.js" },
     { "src": "/funtionCine/(.*)", "dest": "/index.js" },
     { "src": "/reservaMovie/(.*)", "dest": "/index.js" },

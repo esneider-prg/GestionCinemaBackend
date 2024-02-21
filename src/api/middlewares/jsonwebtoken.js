@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../constants')
+const {JWT_SECRET} = require('../../api/constants')
 const asyncHandler = require("express-async-handler");
 const UserCinema = require("../models/Account")
 

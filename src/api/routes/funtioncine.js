@@ -11,10 +11,10 @@ const router = express.Router();
 
 
 //Rutas adminstrador
-router.post("/", [protect],[admin] ,createFuntionCine);
-router.delete("/:id", [protect],[admin] ,deleteFuntionCine);
-router.put("/:id", [protect],[admin] ,updateFuntionCine);
-router.get("/", [protect],[admin] ,getFuntionCine);
+router.post("api/v1/", [protect],[admin] ,createFuntionCine);
+router.delete("api/v1/:id", [protect],[admin] ,deleteFuntionCine);
+router.put("api/v1/:id", [protect],[admin] ,updateFuntionCine);
+router.get("api/v1/", [protect],[admin] ,getFuntionCine);
 
 
 

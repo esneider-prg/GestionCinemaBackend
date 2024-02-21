@@ -19,7 +19,7 @@ async function bootstrap() {
   app.use("/movies", moviesRouter);
   app.use("/funtionCine", funtionRouter);
   app.use("/reservaMovie", RouteReservaMovie);
-  app.use("/upload", [protect],[admin] ,Uploadrouter);
+  app.use("/upload",Uploadrouter);
 
  
 

@@ -1,31 +1,11 @@
-require("dotenv").config(); // Secures variables
-const app = require("./utils/app"); // Backend App (server)
-const mongo = require("./utils/mongo"); // MongoDB (database)
-const { PORT } = require("./constants");
-const authRoutes = require("./routes/auth");
-const moviesRouter = require("./routes/movie.js");
-const funtionRouter = require("./routes/funtioncine.js");
-const RouteReservaMovie = require("./routes/reservaMovie.js");
-const Uploadrouter = require("./controllers/pelicula/UploadFile.js");
-const {admin,protect} = require("./middlewares/jsonwebtoken.js");
+const app = require('express')()
 
+app.get('/api', function (req, res) {
+  return res.json({hello: 'dog'});
+});
 
-async function bootstrap() {
-  await mongo.connect();
+app.get('/api/marco', function (req, res) {
+  return res.end("polo");
+});
 
-  app.get("/", (req, res) => res.status(200).json({ message: "Hello Cinemaaaaa!" }));
-  app.get("/health", (req, res) => res.status(200).json({ message: "Hello Cinema!" }));
-  app.use("/auth", authRoutes);
-  app.use("/movies", moviesRouter);
-  app.use("/funtionCine", funtionRouter);
-  app.use("/reservaMovie", RouteReservaMovie);
-  app.use("/upload",Uploadrouter);
-
- 
-
-  app.listen(PORT, () => {
-    console.log(`✅ Server is listening on port: ${PORT}`);
-  });
-}
-
-bootstrap();
+module.exports = app

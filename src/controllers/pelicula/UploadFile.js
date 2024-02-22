@@ -39,7 +39,7 @@ Uploadrouter.post("/", upload.single("file"), async (req, res) => {
       blobStream.end(file.buffer);
       // when there is no file
     } else {
-      res.status(400).json({ message: "Please upload a file" });
+      res.status(400).json({ message: "Please upload a files" });
     }
   } catch (error) {
     res.status(404).json({ message: error.message });

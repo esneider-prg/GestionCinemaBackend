@@ -1,7 +1,7 @@
 require("dotenv").config(); // Secures variables
 const app = require("./utils/app"); // Backend App (server)
 const mongo = require("./utils/mongo"); // MongoDB (database)
-const { PORT } = require("../api/constants/index.js");
+const { PORT } = require("./constants");
 const authRoutes = require("./routes/auth");
 const moviesRouter = require("./routes/movie.js");
 const funtionRouter = require("./routes/funtioncine.js");
@@ -13,12 +13,13 @@ const {admin,protect} = require("./middlewares/jsonwebtoken.js");
 async function bootstrap() {
   await mongo.connect();
 
-
-  app.use("/api/auth", authRoutes);
-  app.use("/api/movies", moviesRouter);
-  app.use("/api/funtionCine", funtionRouter);
-  app.use("/api/reservaMovie", RouteReservaMovie);
-  app.use("/api/upload",Uploadrouter);
+  app.get("/", (req, res) => res.status(200).json({ message: "Hello Cinema!" }));
+  app.get("/health", (req, res) => res.status(200).send());
+  app.use("/auth", authRoutes);
+  app.use("/movies", moviesRouter);
+  app.use("/funtionCine", funtionRouter);
+  app.use("/reservaMovie", RouteReservaMovie);
+  app.use("/upload", [protect],[admin] ,Uploadrouter);
 
  
 

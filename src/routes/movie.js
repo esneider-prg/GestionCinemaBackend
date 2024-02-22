@@ -7,14 +7,14 @@ const {admin,protect} = require("../middlewares/jsonwebtoken");
 const router = express.Router();
 
 //Rutas publicas
-router.get("api/v1/", getMovies);
-router.get("api/v1/:id", getMovieById);
+router.get("/", getMovies);
+router.get("/:id", getMovieById);
 
 
 //Rutas adminstrador
-router.post("api/v1/", [protect],[admin] ,createMovie);
-router.delete("api/v1/:id", [protect],[admin] ,deleteMovie);
-router.put("api/v1/:id", [protect],[admin] ,updateMovie);
+router.post("/", [protect],[admin] ,createMovie);
+router.delete("/:id", [protect],[admin] ,deleteMovie);
+router.put("/:id", [protect],[admin] ,updateMovie);
 
 
 

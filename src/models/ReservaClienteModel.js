@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const reservaMoviesSchema = mongoose.Schema(
+const ClienteSchema = mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,29 +12,25 @@ const reservaMoviesSchema = mongoose.Schema(
       ref: 'Pelicula',
       required: true,
     },
-    hora: {
-      type: String,
+    reservaPeliculaId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Reserva',
       required: true,
     },
-    sala: {
-      type: String,
-      required: true,
-    },
-    asientosSala: [],
 
-    asientosNumeroOcupado: {
+    asientosUsuario: [],
+    ticketsNum: {
       type: String,
       default: '0',
     },
-    
-    asientosDisponibles: {
+    valorTotal: {
       type: String,
       default: '0',
     },
     estado: {
       type: String,
-      enum: ['activa', 'desactivada',],
-      default: 'activa',
+      enum: ['pendiente', 'confirmada', 'cancelada'],
+      default: 'pendiente',
     },
   },
   {
@@ -42,4 +38,4 @@ const reservaMoviesSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("ReservaPelicula", reservaMoviesSchema);
+module.exports = mongoose.model("reservacliente", ClienteSchema);

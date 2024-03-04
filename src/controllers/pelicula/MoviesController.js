@@ -67,7 +67,6 @@ const asyncHandler = require("express-async-handler");
         movie.Genero = Genero || movie.Genero;
         movie.Sinopsis = Sinopsis || movie.Sinopsis;
         movie.Duracion = Duracion || movie.Duracion;
-        movie.image = image || movie.image;
         movie.imageCartelera = imageCartelera || movie.imageCartelera;
         movie.imageBackground = imageBackground || movie.imageBackground;
         movie.Formato = Formato || movie.Formato;

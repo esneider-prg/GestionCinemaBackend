@@ -1,5 +1,7 @@
 const ReservaMo = require("../../models/ReservaMovieModel");
+const ReservaClien = require("../../models/ReservaClienteModel");
 const asyncHandler = require("express-async-handler");
+
 
 const getReservaMovies = asyncHandler(async (req, res) => {
   try {
@@ -11,51 +13,98 @@ const getReservaMovies = asyncHandler(async (req, res) => {
   }
 });
 
-const updateMovie = asyncHandler(async (req, res) => {
+const updateReservaMovie = asyncHandler(async (req, res) => {
   try {
     // get data from request body
     const {
-      Titulo,
-      SubTitulo,
-      Genero,
-      Sinopsis,
-      imageCartelera,
-      imageBackground,
-      Formato,
-      Clasificacion,
-      HoraDisponibles,
-      Valorboleta,
+      asientosSala,
+      asientosNumeroOcupado,
+      estado,
     } = req.body;
 
     // find movie by id in database
-    const movie = await Movie.findById(req.params.id);
+    const reserva = await ReservaMo.findById(req.params.id);
 
-    if (movie) {
+    if (reserva) {
       // update movie data
-      movie.Titulo = Titulo || movie.Titulo;
-      movie.SubTitulo = SubTitulo || movie.SubTitulo;
-      movie.Genero = Genero || movie.Genero;
-      movie.Sinopsis = Sinopsis || movie.Sinopsis;
-      movie.image = image || movie.image;
-      movie.imageCartelera = imageCartelera || movie.imageCartelera;
-      movie.imageBackground = imageBackground || movie.imageBackground;
-      movie.Formato = Formato || movie.Formato;
-      movie.Clasificacion = Clasificacion || movie.Clasificacion;
-      movie.HoraDisponibles = HoraDisponibles || movie.HoraDisponibles;
-      movie.Valorboleta = Valorboleta || movie.Valorboleta;
+      reserva.asientosSala = asientosSala || reserva.asientosSala;
+      reserva.asientosNumeroOcupado = asientosNumeroOcupado || reserva.asientosNumeroOcupado;
+      reserva.estado = estado || reserva.estado;
+
       // save the movie in database
 
-      const updatedMovie = await movie.save();
+      const updatedReserva = await reserva.save();
       // send the updated movie to the client
-      res.status(201).json(updatedMovie);
+      res.status(201).json(updatedReserva);
     } else {
       res.status(404);
-      throw new Error("Movie not found");
+      throw new Error("Reserva no encontrada");
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
+
+const getReservaMovieSillas = asyncHandler(async (req, res) => {
+  const asientosOcupados = [];
+  let totalTickets = 0;
+  // try {
+  const ReservasMovieSillas = await ReservaMo.findById({ _id: req.params.id })
+  //
+  if (ReservasMovieSillas) {
+    const {
+      hora,
+      sala,
+      asientosSala,
+      asientosDisponibles,
+      asientosNumeroOcupado,
+      estado,
+      peliculaId,
+      userId,
+    } = ReservasMovieSillas;
+
+    const reservaPeliculaSillas = await ReservaClien.find({ reservaPeliculaId: req.params.id }, { asientosUsuario: 1, ticketsNum: 1 });
+    // const { asientosUsuario, ticketsNum } = ReservasClienteSillas;
+    reservaPeliculaSillas?.forEach((objeto) => {
+      asientosOcupados.push(...objeto.asientosUsuario);
+      totalTickets += parseInt(objeto.ticketsNum);
+    });
+    console.log("Asientos acumulados:", asientosOcupados);
+    console.log("Total de tickets:", totalTickets);
+
+
+
+    if (ReservasMovieSillas) {
+      ReservasMovieSillas.asientosSala = asientosOcupados || ReservasMovieSillas.asientosSala;
+      ReservasMovieSillas.asientosNumeroOcupado = totalTickets || ReservasMovieSillas.asientosNumeroOcupado;
+      ReservasMovieSillas.hora = hora || ReservasMovieSillas.hora;
+      ReservasMovieSillas.sala = sala || ReservasMovieSillas.sala;
+      ReservasMovieSillas.asientosDisponibles = asientosDisponibles || ReservasMovieSillas.asientosDisponibles;
+      ReservasMovieSillas.estado = estado || ReservasMovieSillas.estado;
+      ReservasMovieSillas.peliculaId = peliculaId || ReservasMovieSillas.peliculaId;
+      ReservasMovieSillas.userId = userId || ReservasMovieSillas.userId;
+
+      const updatedReservaMovieSillas = await ReservasMovieSillas.save();
+      res.status(201).json(updatedReservaMovieSillas);
+    } else {
+      res.status(400).json({ mensaje: "No se creo la reservaSilla" });
+    }
+    res.json({
+      //ReservasMovieSillas
+      asientosOcupados: asientosOcupados,
+      totalTickets: totalTickets
+    });
+  } else {
+    res.status(400).json({ mensaje: "No se encontró la reserva de la película indicada" });
+  }
+
+  // } catch (error) {
+  //   res.status(400).json({ mensaje: "No se encontró la reserva de la película indicada" });
+  // }
+});
+
+
 
 // @desc    Delete movie
 // @route   DELETE /api/movies/:id
@@ -102,7 +151,8 @@ const createReservaMovie = asyncHandler(async (req, res) => {
       hora,
       sala,
       asientosSala,
-      numTickets,
+      asientosDisponibles,
+      asientosNumeroOcupado,
       estado,
       peliculaId,
     } = req.body;
@@ -112,7 +162,8 @@ const createReservaMovie = asyncHandler(async (req, res) => {
       hora,
       sala,
       asientosSala,
-      numTickets,
+      asientosDisponibles,
+      asientosNumeroOcupado,
       estado,
       peliculaId,
       userId: req.user._id,
@@ -134,5 +185,7 @@ const createReservaMovie = asyncHandler(async (req, res) => {
 module.exports = {
   createReservaMovie,
   getReservaMovies,
-  getReservaMovieById
+  getReservaMovieById,
+  updateReservaMovie,
+  getReservaMovieSillas,
 };
